@@ -4,11 +4,33 @@ import { Button, Container, Nav, Navbar, Row, Col } from 'react-bootstrap';
 import data from "./data";
 import {useState} from "react"; //-->exprot {a, b} 인 경우 import {a, b} from "./data"; 로 import 한다
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
+import styled from 'styled-components'
+import axios from "axios";
 
 //import Main from "./routes/Main"
 //import Category from "./routes/Category"
 import Detail from "./routes/Detail"
-//import ListContent from "./routes/ListContent";
+import Detail1 from "./routes/Detail1"
+import ListContent from "./routes/ListContent";
+
+////////////////////////////////////////////////
+/*
+//한 파일 내 개별로 스타일 지정 시 유용함
+// => styled
+ */
+let Box = styled.div`
+  padding : 20px;
+  color : grey
+`;
+let YellowBtn = styled.button`
+  background : ${props => props.bg};
+  color : black;
+  padding : 10px;
+  border-radius: 8px;
+  border-color: orange;
+`;
+////////////////////////////////////////////////
+
 function App() {
 
   /* css */
@@ -48,23 +70,37 @@ function App() {
               <h2 style={foodsStyle}>Kim's Food</h2>
             </div>
             <Container>
-              <Row>
-                <Col><h3 style={categoryTitleStyle}>RECOMMAND FOODS</h3></Col>
-              </Row>
+              <div>
+                <h3 style={categoryTitleStyle}>RECOMMAND FOODS</h3>
+              </div>
+              <div style={{textAlign:"right", padding:10}}>
+                <YellowBtn bg="#fff" onClick={() => {
+                  let foodsCopy = [...foods];
+                  foodsCopy.sort((a, b) => a.title.localeCompare(b.title));
+                  setFoods(foodsCopy);
+                }}>이름순 정렬</YellowBtn>
+              </div>
               <Row>
                 {
                   foods.map(function(food, i){
                     return (
-                      <ListContent food={food} foodIndex={i}  />
+                      <ListContent food={food} foodIndex={i} key={i}  />
                     )
                   })
                 }
               </Row>
+              <div style={{padding:5, textAlign:"center", fontSize:11, cursor:"pointer"}}
+                   onClick={()=>{
+                    axios.get('https://codingapple1.github.io/shop/data2.json')
+                      .then()
+                   }}>
+                더보기</div>
             </Container>
           </>
         } />
         {/*<Route path="/category" element={<Category foods={foods} setFoods={setFoods} />} />*/}
         <Route path="/detail/:id" element={<Detail foods={foods} />} />
+        <Route path="/detail1" element={<Detail1 />} />
         <Route path="/event" element={<Event />}>>
           <Route path="event1" element={<Event1 />} />
           <Route path="event2" element={<Event2 />} />
@@ -80,20 +116,6 @@ function App() {
 }
 
 
-function ListContent(props) {
-  return (
-    <Col>
-      <Link to={"/detail/" + props.food.id}>
-        <div>
-          <div><img src={props.food.img} width="300" height="200" alt={"상품번호 : " + props.foodIndex} /></div>
-          <h4>{props.food.title}</h4>
-          <p>{props.food.price}</p>
-          <p>{props.food.content}</p>
-        </div>
-      </Link>
-    </Col>
-  );
-}
 
 function About() {
   return(
