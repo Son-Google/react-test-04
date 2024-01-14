@@ -46,6 +46,7 @@ function App() {
   }
 
   let [foods, setFoods] = useState(data);
+  let [moreIndex, setMoreIndex] = useState(2);
   let navigate = useNavigate();
 
   return (
@@ -84,15 +85,27 @@ function App() {
                 {
                   foods.map(function(food, i){
                     return (
-                      <ListContent food={food} foodIndex={i} key={i}  />
+                      <ListContent food={food} key={i}  />
                     )
                   })
                 }
               </Row>
               <div style={{padding:5, textAlign:"center", fontSize:11, cursor:"pointer"}}
                    onClick={()=>{
-                    axios.get('https://codingapple1.github.io/shop/data2.json')
-                      .then()
+                    axios.get('https://raw.githubusercontent.com/Son-Google/react-test-04/master/src/data'+moreIndex+'.json')
+                      .then((data)=>{
+                        console.log(data.data)
+                        let foodsCopy = [...foods];
+                        foodsCopy = foodsCopy.concat(data.data);
+                        setFoods(foodsCopy);
+                        setMoreIndex(++moreIndex);
+                      })
+                      .catch(()=>{
+                        window.alert("오류입니다.")
+                      })
+                      .finally(()=>{
+                        //window.alert("종료입니다.")
+                      })
                    }}>
                 더보기</div>
             </Container>

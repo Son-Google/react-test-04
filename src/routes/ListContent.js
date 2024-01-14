@@ -7,7 +7,7 @@ let ListContent = function (props){
       <Col>
         <Link to={"/detail/" + props.food.id}>
           <div>
-            <div><img src={props.food.img} width="300" height="200" alt={"상품번호 : " + props.foodIndex} /></div>
+            <div><img src={props.food.img} width="300" height="200" alt={"상품번호 : " + props.food.id} /></div>
             <h4>{props.food.title}</h4>
             <p>{props.food.price}</p>
             <p>{props.food.content}</p>

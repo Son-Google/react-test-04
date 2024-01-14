@@ -1,0 +1,23 @@
+[
+  {
+    "id": 7,
+    "img" : "https://rimage.gnst.jp/livejapan.com/public/img/spot/lj/00/07/lj0007804/lj0007804_5b1a6383d8e91_main.jpg?20210612050138&q=80&rw=616",
+    "title": "Sijang",
+    "content": "from Dongmyo station",
+    "price": 120000
+  },
+  {
+    "id": 8,
+    "img" : "https://rimage.gnst.jp/livejapan.com/public/img/in-japan/category/cs0201001_i.jpg?rw=616&rh=616&q=80&20240114060001",
+    "title": "Tag gari",
+    "content": "ali and taobao",
+    "price": 120000
+  },
+  {
+    "id": 9,
+    "img" : "https://rimage.gnst.jp/livejapan.com/public/article/detail/a/00/00/a0000340/img/basic/a0000340_main.jpg?20170428102442&q=80",
+    "title": "Flyer",
+    "content": "Refund not available",
+    "price": 120000
+  }
+]
