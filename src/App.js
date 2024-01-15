@@ -2,7 +2,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Container, Nav, Navbar, Row, Col } from 'react-bootstrap';
 import data from "./data";
-import {useState} from "react"; //-->exprot {a, b} 인 경우 import {a, b} from "./data"; 로 import 한다
+import {createContext, useState} from "react"; //-->exprot {a, b} 인 경우 import {a, b} from "./data"; 로 import 한다
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 import axios from "axios";
@@ -31,6 +31,11 @@ let YellowBtn = styled.button`
 `;
 ////////////////////////////////////////////////
 
+//ContextAPI 예제를 위한 구문
+export let Context1 = createContext();
+
+////////////////////////////////////////////////
+
 function App() {
 
   /* css */
@@ -46,7 +51,10 @@ function App() {
   }
 
   let [foods, setFoods] = useState(data);
+  let [재고] = useState([10, 11, 12]);
   let [moreIndex, setMoreIndex] = useState(2);
+  let [morediv, setMoreDiv] = useState(true);
+  let [loadingImgStatus, setLoadingImgStatus] = useState(false);
   let navigate = useNavigate();
 
   return (
@@ -81,6 +89,11 @@ function App() {
                   setFoods(foodsCopy);
                 }}>이름순 정렬</YellowBtn>
               </div>
+              {
+                (loadingImgStatus === true) ?
+                  <div><img src="/loading.gif" /></div>
+                  : null
+              }
               <Row>
                 {
                   foods.map(function(food, i){
@@ -90,29 +103,40 @@ function App() {
                   })
                 }
               </Row>
-              <div style={{padding:5, textAlign:"center", fontSize:11, cursor:"pointer"}}
-                   onClick={()=>{
-                    axios.get('https://raw.githubusercontent.com/Son-Google/react-test-04/master/src/data'+moreIndex+'.json')
-                      .then((data)=>{
-                        console.log(data.data)
-                        let foodsCopy = [...foods];
-                        foodsCopy = foodsCopy.concat(data.data);
-                        setFoods(foodsCopy);
-                        setMoreIndex(++moreIndex);
-                      })
-                      .catch(()=>{
-                        window.alert("오류입니다.")
-                      })
-                      .finally(()=>{
-                        //window.alert("종료입니다.")
-                      })
-                   }}>
-                더보기</div>
+              {
+                (morediv === true )
+                  ? <div style={{padding:5, textAlign:"center", fontSize:11, cursor:"pointer"}}
+                       onClick={()=>{
+                         setLoadingImgStatus(true);
+                         axios.get('https://raw.githubusercontent.com/Son-Google/react-test-04/master/src/data'+moreIndex+'.json')
+                          .then((data)=>{
+                            console.log(data.data)
+                            let foodsCopy = [...foods];
+                            foodsCopy = foodsCopy.concat(data.data);
+                            setFoods(foodsCopy);
+                            setMoreIndex(++moreIndex);
+                          })
+                          .catch(()=>{
+                            window.alert("더이상 표시할 수 없습니다.")
+                            setMoreDiv(false)
+                          })
+                          .finally(()=>{
+                            setLoadingImgStatus(false);
+                            //window.alert("종료입니다.")
+                          })
+                       }}>
+                    더보기</div>
+                  : null
+              }
             </Container>
           </>
         } />
         {/*<Route path="/category" element={<Category foods={foods} setFoods={setFoods} />} />*/}
-        <Route path="/detail/:id" element={<Detail foods={foods} />} />
+        <Route path="/detail/:id" element={
+          <Context1.Provider value={{ 재고}}>
+            <Detail foods={foods} />
+          </Context1.Provider>
+        } />
         <Route path="/detail1" element={<Detail1 />} />
         <Route path="/event" element={<Event />}>>
           <Route path="event1" element={<Event1 />} />
