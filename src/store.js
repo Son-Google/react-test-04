@@ -24,17 +24,40 @@ let cart = createSlice({
     setPlusCart(state, action){
       let i = state.findIndex((x) => {
         return x.id === action.payload;
-      })
+      });
       state[i].count++;
+      let c= state[i].count;
+      state[i].count = (c > 5) ? 5 : c;
+      if(state[i].count==6){
+        alert('하지마 배새끼야!');
+      }
     },
     setMinusCart(state, action){
       let i = state.findIndex(function(x){
         return x.id === action.payload;
-      })
+      });
       state[i].count--;
+      let c= state[i].count;
+      state[i].count = (c < 1) ? 1 : c;
+      if(c==0){
+        state.splice(i, 1);
+      }
     },
     addItem(state, action){
-      state.push(action.payload);
+      const obj = action.payload;
+      let i = state.findIndex(function(x){
+        return x.id === obj.id;
+      });
+      if(i == '' || i == null || i == undefined || i == 0 || i == NaN || i == -1) {
+        state.push(obj);
+      } else {
+        state[i].count++;
+        let c= state[i].count;
+        state[i].count = (c > 5) ? 5 : c;
+        if(state[i].count==6){
+          alert('하지마 배새끼야!');
+        }
+      }
     },
   }
 });
