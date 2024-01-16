@@ -1,15 +1,12 @@
 import {Col, Container, Row, Nav} from "react-bootstrap";
 import {useState, useEffect, useContext} from "react";
 import {useParams} from "react-router-dom";
-
-////////////////////////////////////////////////
-//ContextAPI 연습용
-import {Context1} from "./../App"
-////////////////////////////////////////////////
+import {addItem} from "../store";
 
 ////////////////////////////////////////////////
 //스타일 문법 연습용
 import styled from 'styled-components'
+import {useDispatch, useSelector} from "react-redux";
 let Input = styled.input`
   width: 50px;
 `;
@@ -32,9 +29,8 @@ class DatailLife extends React.Component{
 
 let Detail = function (props){
 
-  //ContextAPI 연습용
-  let {재고} = useContext(Context1);
-
+  ////////////////////////////////////////////////
+  //기본 셋팅
   let {id} = useParams();
   let [count, setCount] = useState(0);
   let [alert, setAlert] = useState(true);
@@ -44,6 +40,7 @@ let Detail = function (props){
   let food = props.foods.find(function(x){
     return x.id == id
   });
+  ////////////////////////////////////////////////
 
   ////////////////////////////////////////////////
   //요즘 LifeCycle
@@ -71,12 +68,17 @@ let Detail = function (props){
    */
   ////////////////////////////////////////////////
 
+  ////////////////////////////////////////////////
+  //redux 쓸 때 이래야함
+  let cart = useSelector(state => state.cart); // {return ...} 생략가능
+  let dispatch = useDispatch();
+  ////////////////////////////////////////////////
+
   return (
     <>
       <Container>
         <div className="align-content-center m-auto" style={{padding: 10}}>
           <button className="btn btn-success" onClick={()=>{setCount(++count)}}>카운트</button> => {count}
-          ---->{재고[0]}
         </div>
         {
           (food === null)
@@ -93,7 +95,10 @@ let Detail = function (props){
                   <p className="pt-5">수량 : <Input onChange={(e)=>{
                     setCountText(e.target.value)
                   }} /></p>
-                  <p className="pt-5"><button className="btn btn-danger">주문하기{food.id}</button> </p>
+                  <p className="pt-5">
+                    <button className="btn btn-danger" onClick={() => {
+                      dispatch(addItem({id: food.id, img: food.img, name:food.title, count:1}))
+                    }}>주문하기</button> </p>
                 </div>
                 <Nav variant="tabs"  defaultActiveKey="link0">
                   <Nav.Item>
@@ -117,8 +122,6 @@ let Detail = function (props){
 function TabContent(props){
 
   let [fade, setFade] = useState('');
-  //ContextAPI 연습용
-  let {재고} = useContext(Context1);
 
   useEffect(()=>{
     setTimeout(()=>{
@@ -134,11 +137,11 @@ function TabContent(props){
   //아래 첫번째는 ``  기호를 사용하는 방법이다
   //탭 인덱스별로 내용 다르게 보이게  처리
   if(props.tabIndex == 0){
-    return (<div className={`start ${fade}`}>내용0 {재고[0]}</div>);
+    return (<div className={`start ${fade}`}>내용0</div>);
   } else if(props.tabIndex == 1){
-    return (<div className={"start " + fade}>내용1 {재고[0]}</div>);
+    return (<div className={"start " + fade}>내용1</div>);
   } else if(props.tabIndex == 2){
-    return (<div className={"start " + fade}>내용2 {재고[2]}</div>);
+    return (<div className={"start " + fade}>내용2</div>);
   }
 }
 

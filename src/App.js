@@ -1,7 +1,6 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Container, Nav, Navbar, Row, Col } from 'react-bootstrap';
-import data from "./data";
 import {createContext, useState} from "react"; //-->exprot {a, b} 인 경우 import {a, b} from "./data"; 로 import 한다
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
 import styled from 'styled-components'
@@ -12,6 +11,8 @@ import axios from "axios";
 import Detail from "./routes/Detail"
 import Detail1 from "./routes/Detail1"
 import ListContent from "./routes/ListContent";
+import Cart from "./routes/Cart"
+import data from "./data";
 
 ////////////////////////////////////////////////
 /*
@@ -65,7 +66,7 @@ function App() {
           <Nav className="me-auto">
             <Nav.Link onClick={() => {navigate('/')}}>Home</Nav.Link>
             <Nav.Link onClick={() => {navigate('/category')}}>Food</Nav.Link>
-            <Nav.Link onClick={() => {navigate('#cart')}}>Cart</Nav.Link>
+            <Nav.Link onClick={() => {navigate('/cart')}}>Cart</Nav.Link>
             <Nav.Link onClick={() => {navigate('event/event1')}}>Event</Nav.Link>
             <Nav.Link onClick={() => {navigate('about')}}>About</Nav.Link>
           </Nav>
@@ -133,11 +134,16 @@ function App() {
         } />
         {/*<Route path="/category" element={<Category foods={foods} setFoods={setFoods} />} />*/}
         <Route path="/detail/:id" element={
-          <Context1.Provider value={{ 재고}}>
-            <Detail foods={foods} />
+          <Detail foods={foods} />
+        } />
+        {/* datail1 은 context api 타입 */}
+        <Route path="/detail1/:id" element={
+          /* 아래 넘기는 내용이 많을 때에는 value={{재고, foods, shoes ....}} */
+          <Context1.Provider value={{재고}}>
+            <Detail1 foods={foods} />
           </Context1.Provider>
         } />
-        <Route path="/detail1" element={<Detail1 />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="/event" element={<Event />}>>
           <Route path="event1" element={<Event1 />} />
           <Route path="event2" element={<Event2 />} />
