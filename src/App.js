@@ -1,20 +1,20 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Container, Nav, Navbar, Row, Col } from 'react-bootstrap';
-import {createContext, useEffect, useState} from "react"; //-->exprot {a, b} 인 경우 import {a, b} from "./data"; 로 import 한다
+import {createContext, lazy, Suspense, useEffect, useState} from "react"; //-->exprot {a, b} 인 경우 import {a, b} from "./data"; 로 import 한다
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 import axios from "axios";
 
 //import Main from "./routes/Main"
 //import Category from "./routes/Category"
-import Detail from "./routes/Detail"
-import Detail1 from "./routes/Detail1"
 import ListContent from "./routes/ListContent";
-import Cart from "./routes/Cart"
-
 import data from "./data";
 import {useQuery} from "react-query";
+
+const Detail = lazy(() => import("./routes/Detail"));
+const Detail1 = lazy(() => import("./routes/Detail1"));
+const Cart = lazy(() => import("./routes/Cart"));
 
 ////////////////////////////////////////////////
 /*
@@ -163,16 +163,23 @@ function App() {
         } />
         {/*<Route path="/category" element={<Category foods={foods} setFoods={setFoods} />} />*/}
         <Route path="/detail/:id" element={
-          <Detail foods={foods} />
+          <Suspense fallback={<div><img src="/loading.gif" /></div>}>
+            <Detail foods={foods} />
+          </Suspense>
         } />
         {/* datail1 은 context api 타입 */}
         <Route path="/detail1/:id" element={
           /* 아래 넘기는 내용이 많을 때에는 value={{재고, foods, shoes ....}} */
-          <Context1.Provider value={{재고}}>
-            <Detail1 foods={foods} />
-          </Context1.Provider>
+          <Suspense fallback={<div><img src="/loading.gif" /></div>}>
+            <Context1.Provider value={{재고}}>
+              <Detail1 foods={foods} />
+            </Context1.Provider>
+          </Suspense>
         } />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/cart" element={
+          <Suspense fallback={<div><img src="/loading.gif" /></div>}>
+            <Cart />
+          </Suspense>} />
         <Route path="/event" element={<Event />}>>
           <Route path="event1" element={<Event1 />} />
           <Route path="event2" element={<Event2 />} />

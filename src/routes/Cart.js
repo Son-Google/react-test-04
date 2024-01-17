@@ -2,17 +2,36 @@ import {Table} from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { changeName, addAge } from "../store/userSlice";
 import {setMinusCart, setPlusCart} from "../store";
+import {memo, useState} from "react";
+
+/*
+//처음에 배웠던 내용이지만 재렌더링을 방지해야 한다
+//재렌더링 예제용
+function Child(){
+  console.log('재렌더링됨-성능저하')
+  return <div>자식임</div>
+}
+*/
+let Child = memo( function(){
+  console.log('재렌더링됨')
+  return <div>자식임</div>
+})
 
 let Cart = function(){
+
+  let [count, setCount] = useState(0);
 
   //redux 쓸 때 이래야함
   let user = useSelector((state) => {return state.user});
   let cart = useSelector(state => state.cart); // {return ...} 생략가능
   let dispatch = useDispatch();
 
+
   return(
     <>
       <div>
+        <Child></Child>
+        <p><button onClick={()=>{ setCount(count+1) }}> + </button></p>
         {user.name} ({user.age}짤) 의 장바구니
         <button className="btn btn-success" onClick={() => {
           dispatch(changeName())
