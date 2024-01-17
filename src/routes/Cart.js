@@ -32,8 +32,8 @@ let Cart = function(){
         </thead>
         <tbody>
         {
-          cart.map(function (goods, i){
-            return(
+          cart.map((goods, i)=>
+            (
               <tr key={i}>
                 <td>{i+1}</td>
                 <td><img src={goods.img} width="200" height="150" alt={"상품번호 : " + goods.id} /></td>
@@ -50,7 +50,7 @@ let Cart = function(){
                 </td>
               </tr>
             )
-          })
+          )
         }
         </tbody>
       </Table>

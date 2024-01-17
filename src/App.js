@@ -1,7 +1,7 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Container, Nav, Navbar, Row, Col } from 'react-bootstrap';
-import {createContext, useState} from "react"; //-->exprot {a, b} 인 경우 import {a, b} from "./data"; 로 import 한다
+import {createContext, useEffect, useState} from "react"; //-->exprot {a, b} 인 경우 import {a, b} from "./data"; 로 import 한다
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 import axios from "axios";
@@ -12,6 +12,7 @@ import Detail from "./routes/Detail"
 import Detail1 from "./routes/Detail1"
 import ListContent from "./routes/ListContent";
 import Cart from "./routes/Cart"
+
 import data from "./data";
 
 ////////////////////////////////////////////////
@@ -58,6 +59,20 @@ function App() {
   let [loadingImgStatus, setLoadingImgStatus] = useState(false);
   let navigate = useNavigate();
 
+  ////////////////////////////////////////////////
+  //localStorage
+  let storage = {name : 'kim'};
+  localStorage.setItem('storage', JSON.stringify(storage));
+  let objStorage = JSON.parse(localStorage.getItem("storage"));
+  //console.log(objStorage);
+
+  useEffect(() => {
+    localStorage.setItem("watched",JSON.stringify([]))
+  }, []);
+  ////////////////////////////////////////////////
+
+
+
   return (
     <div className="App">
       <Navbar bg="dark" data-bs-theme="dark">
@@ -67,8 +82,8 @@ function App() {
             <Nav.Link onClick={() => {navigate('/')}}>Home</Nav.Link>
             <Nav.Link onClick={() => {navigate('/category')}}>Food</Nav.Link>
             <Nav.Link onClick={() => {navigate('/cart')}}>Cart</Nav.Link>
-            <Nav.Link onClick={() => {navigate('event/event1')}}>Event</Nav.Link>
-            <Nav.Link onClick={() => {navigate('about')}}>About</Nav.Link>
+            <Nav.Link onClick={() => {navigate('/event/event1')}}>Event</Nav.Link>
+            <Nav.Link onClick={() => {navigate('/about')}}>About</Nav.Link>
           </Nav>
         </Container>
       </Navbar>

@@ -43,6 +43,17 @@ let Detail = function (props){
   ////////////////////////////////////////////////
 
   ////////////////////////////////////////////////
+  //로컬스토리지 이용 본 상품 저장하기
+  useEffect(() => {
+    let watchedObj = JSON.parse(localStorage.getItem("watched"));
+    watchedObj.push(id);
+    const set = new Set(watchedObj);
+    const uniqueWatchedObj = [...set];
+    localStorage.setItem('watched', JSON.stringify(uniqueWatchedObj));
+  });
+  ////////////////////////////////////////////////
+
+  ////////////////////////////////////////////////
   //요즘 LifeCycle
   //useEffect을 사용하는 이유 : html 렌더링이 다 된 후 실행
   //뒤에 [...] 디펜던시가 없으면 useEffect가 실행될 때 바로 실행, 있으면 그 변수가 변할 때 실행
