@@ -14,6 +14,7 @@ import ListContent from "./routes/ListContent";
 import Cart from "./routes/Cart"
 
 import data from "./data";
+import {useQuery} from "react-query";
 
 ////////////////////////////////////////////////
 /*
@@ -71,6 +72,18 @@ function App() {
   }, []);
   ////////////////////////////////////////////////
 
+  let result = useQuery('getData',()=>{
+    return axios.get('https://codingapple1.github.io/userdata.json')
+      .then((a)=>{ console.log("요청"); return a.data; });
+  },{staleTime : 2000})
+  ;
+
+  //위에 result
+  /*
+  //result.data => data
+  //result.isLoading => boolean
+  //result.error =>
+   */
 
 
   return (
@@ -85,6 +98,7 @@ function App() {
             <Nav.Link onClick={() => {navigate('/event/event1')}}>Event</Nav.Link>
             <Nav.Link onClick={() => {navigate('/about')}}>About</Nav.Link>
           </Nav>
+          <Nav className="ms-auto" style={{color:"#fff"}}>{result.isLoading ? "로딩중" : "반가워요 " + result.data.name}</Nav>
         </Container>
       </Navbar>
 
